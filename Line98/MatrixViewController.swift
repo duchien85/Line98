@@ -21,10 +21,6 @@ class MatrixViewController: UIViewController {
         return button
     }()
     
-    @objc func wasChosen(_ sender: MatrixButton)  {
-        sender.isSelected = (sender.isSelected == true) ? false : true
-    }
-    
     @objc func checkSelected(_ sender: MatrixButton) {
         let matrix: Matrix = sender.paramethers["matrix"] as! Matrix
         for i in 0...9 {
@@ -80,7 +76,7 @@ class MatrixViewController: UIViewController {
 class MatrixButton: UIButton {
     var paramethers: Dictionary<String, Any>
     
-    @objc func wasChosen(sender: MatrixButton)  {
+    @objc func wasChosen(_ sender: MatrixButton)  {
         sender.isSelected = (sender.isSelected == true) ? false : true
     }
     
@@ -98,7 +94,7 @@ class MatrixButton: UIButton {
         self.setImage(#imageLiteral(resourceName: "heartFill"), for: .selected)
         self.layer.cornerRadius = 55
         self.backgroundColor = UIColor.cyan
-        self.addTarget(self, action: #selector(MatrixViewController.wasChosen(_:)), for: .touchUpInside)
+        self.addTarget(self, action: #selector(wasChosen(_:)), for: .touchUpInside)
     }
 }
 
