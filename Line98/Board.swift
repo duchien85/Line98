@@ -13,7 +13,6 @@ protocol BoardDelegate {
 }
 
 struct Board {
-    /// The number of rows and of columns in the square board
     var delegate: BoardDelegate?
     let order: Int
     private var matrix: [[Cell]] = []
