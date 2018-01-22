@@ -10,7 +10,7 @@ import UIKit
 
 class BoardView: UIView, BoardDelegate {
     
-    var board: Board = Board(order: 4)
+    var board: Board = Board(order: 6)
     
     private var buttons: [[CellButton]] = []
     private var ballViews: [BallView] = []
@@ -45,12 +45,14 @@ class BoardView: UIView, BoardDelegate {
             let startPosition: Position = cell.position
             guard let ball = board[startPosition].ball, ball.isBig else { return }
             initialPosition = startPosition
+            print("yay")
         }
     }
     
     private func moveItem(from: Position, to: Position) {
         board.moveBall(from: from, to: to)
         initialPosition = nil
+        setBallViewsFrame()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -73,6 +75,11 @@ class BoardView: UIView, BoardDelegate {
             }
         }
         // Set frames to ballViews
+        setBallViewsFrame()
+    }
+    
+    /// Sets frames for ballViews
+    func setBallViewsFrame() {
         ballViews.forEach { (ballView) in
             let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
             let position: Position = ballView.position

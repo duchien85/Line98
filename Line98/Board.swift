@@ -38,6 +38,8 @@ struct Board {
     
     mutating func moveBall(from: Position, to: Position) {
         guard let ball = self[from].ball else { return }
+        ball.position = to // update position of this ball
+        self[from] = Cell.empty(from)
         self[to] = Cell.occupied(to, ball)
         insertBalls()
     }
