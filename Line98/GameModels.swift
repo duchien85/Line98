@@ -6,8 +6,7 @@
 //  Copyright © 2018 Glaphi. All rights reserved.
 //
 
-import UIKit
-
+import Foundation
 
 struct Position {
     let row: Int
@@ -17,31 +16,12 @@ struct Position {
 enum Cell {
     case empty(Position)
     case occupied(Position, Ball)   //  with a Ball
-
-    var position: Position {
-        switch self {
-        case .empty(let position):
-            return (position)
-        case .occupied((let position), _):
-            return (position)
-        }
-    }
-    
-    var ball: Ball? {
-        switch self {
-        case .empty(_):
-            return nil
-        case .occupied((_), let ball):
-            return ball
-        }
-    }
 }
 
 struct Ball {
     var position: Position
     var isBig: Bool = false // Making them always small when they appear.
-    
-    private var colorIndex: Int  // Color cannot change during the game
+    let colorIndex: Int  // Color cannot change during the game
     private static let colors: [Int] = Array(0..<7) // Array for picking a random color index
     
     init(position: Position) {
@@ -50,28 +30,41 @@ struct Ball {
     }
 }
 
-typealias Matrix = [[MatrixButton]]
+struct Board {
+    let order: Int
+    private var matrix: [[Cell]] = []
+    
+    init(order: Int) {
+        self.order = order
+        for row in 0..<order {
+            var newRow: [Cell] = []
+            for column in 0..<order {
+                let cell: Cell = Cell.empty(Position(row: row, column: column))
+                newRow.append(cell)
+            }
+            matrix.append(newRow)
+        }
+    }
+}
 
-class MatrixButton: UIButton {
-    var paramethers: Dictionary<String, Any>
-    
-    @objc func changeHeart(_ sender: MatrixButton)  {
-        sender.isSelected = (sender.isSelected == true) ? false : true
+extension Board {
+    subscript(position: Position) -> Cell {
+        get { return matrix[position.row][position.column] }
+        set { self.matrix[position.row][position.column] = newValue }
     }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        self.paramethers = [:]
-        super.init(coder: aDecoder)
+}
+
+extension Cell {
+    var position: Position {
+        switch self {
+        case .empty(let position), .occupied((let position), _):
+            return (position)
+        }
     }
-    
-    public override required init(frame: CGRect) {
-        self.paramethers = [:]
-        super.init(frame: frame)
-        
-        self.tag = -1
-        self.setImage(#imageLiteral(resourceName: "heart"), for: .normal)
-        self.setImage(#imageLiteral(resourceName: "heartFill"), for: .selected)
-        self.backgroundColor = UIColor.cyan
-        self.addTarget(self, action: #selector(changeHeart(_:)), for: .touchUpInside)
+    var ball: Ball? {
+        switch self {
+        case .empty(_): return nil
+        case .occupied((_), let ball): return ball
+        }
     }
 }

@@ -13,18 +13,18 @@ class GameViewController: UIViewController {
     var matrix: Matrix = []
     var movesCounter: Int = 0 // How many moves
     
-    var buttonPrintMoves: MatrixButton = {
-        let button: MatrixButton = MatrixButton()
+    var buttonPrintMoves: MatrixCellButton = {
+        let button: MatrixCellButton = MatrixCellButton()
         button.addTarget(self, action: #selector(buttonTest(_:)), for: .touchUpInside)
         button.backgroundColor = .black
         return button
     }()
     
-    @objc func buttonTest(_ sender: MatrixButton) {
+    @objc func buttonTest(_ sender: MatrixCellButton) {
         print(movesCounter)
     }
     
-    @objc func wasChosen(_ sender: MatrixButton) {
+    @objc func wasChosen(_ sender: MatrixCellButton) {
         //let matrix: Matrix = sender.paramethers["matrix"] as! Matrix
         let pos: Position = sender.paramethers["position"] as! Position
         print(pos)
@@ -45,10 +45,10 @@ class GameViewController: UIViewController {
         // Setting frames and creating matrix
         func makeMatrix() -> Matrix {
             var matrix: Matrix = []
-            for row in 0...matrixSize-1 {
-                matrix.append([MatrixButton]())
-                for _ in 0...matrixSize-1 { //column
-                    let newItem: MatrixButton = MatrixButton(frame: CGRect(origin: offset, size: side.asSquareSize))
+            for row in 0..<matrixSize {
+                matrix.append([MatrixCellButton]())
+                for _ in 0..<matrixSize { //column
+                    let newItem: MatrixCellButton = MatrixCellButton(frame: CGRect(origin: offset, size: side.asSquareSize))
                     newItem.addTarget(self, action: #selector(wasChosen(_:)), for: .touchUpInside)
                     view.addSubview(newItem)
                     matrix[row].append(newItem)
