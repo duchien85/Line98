@@ -10,7 +10,7 @@ import UIKit
 
 class BoardView: UIView {
     
-    let board: Board = Board(order: 4)
+    let board: Board = Board(order: 9)
     
     private var buttons: [[CellButton]] = []
     
@@ -64,5 +64,8 @@ class CellButton: UIButton {
     public required init(position: Position, frame: CGRect? = nil) {
         super.init(frame: frame ?? .zero)
         self.position = position
+        self.backgroundColor = .white
+        self.layer.borderColor = UIColor.black.cgColor
+        self.layer.borderWidth = 2
     }
 }
