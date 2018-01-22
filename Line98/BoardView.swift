@@ -10,7 +10,7 @@ import UIKit
 
 class BoardView: UIView {
     
-    let board: Board = Board(order: 9)
+    let board: Board = Board(order: 4)
     
     private var buttons: [[CellButton]] = []
     
@@ -24,6 +24,10 @@ class BoardView: UIView {
         return CGRect(x: x, y: y, width: side, height: side)
     }
     
+    @objc func printPosition(_ sender: CellButton) {
+        print(sender.position)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -35,6 +39,7 @@ class BoardView: UIView {
             var newRow: [CellButton] = []
             for column in 0..<board.order {
                 let button: CellButton = CellButton(position: Position(row: row, column: column))
+                button.addTarget(self, action: #selector(printPosition(_:)), for: .touchUpInside)
                 newRow.append(button)
                 addSubview(button)
             }

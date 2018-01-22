@@ -14,7 +14,6 @@
 		FACE9AC52015948900100679 /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC42015948900100679 /* GameModels.swift */; };
 		FACE9AC72015949F00100679 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC62015949F00100679 /* Extensions.swift */; };
 		FACE9AC92015E55000100679 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC82015E55000100679 /* BoardView.swift */; };
-		FACE9ACB2015E56400100679 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9ACA2015E56400100679 /* File.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		FACE9AC42015948900100679 /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 		FACE9AC62015949F00100679 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FACE9AC82015E55000100679 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
-		FACE9ACA2015E56400100679 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +62,6 @@
 				FA5137D32013E81E00C17871 /* GameViewController.swift */,
 				FACE9AC42015948900100679 /* GameModels.swift */,
 				FACE9AC82015E55000100679 /* BoardView.swift */,
-				FACE9ACA2015E56400100679 /* File.swift */,
 				FACE9AC62015949F00100679 /* Extensions.swift */,
 				FA5137D82013E81E00C17871 /* Assets.xcassets */,
 				FA5137DA2013E81E00C17871 /* LaunchScreen.storyboard */,
@@ -145,7 +142,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA5137D42013E81E00C17871 /* GameViewController.swift in Sources */,
-				FACE9ACB2015E56400100679 /* File.swift in Sources */,
 				FACE9AC52015948900100679 /* GameModels.swift in Sources */,
 				FACE9AC92015E55000100679 /* BoardView.swift in Sources */,
 				FA5137D22013E81E00C17871 /* AppDelegate.swift in Sources */,

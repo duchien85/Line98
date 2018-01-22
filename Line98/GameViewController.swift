@@ -11,26 +11,11 @@ import UIKit
 class GameViewController: UIViewController {
     
     let boardView: BoardView = BoardView()
-    //    var boardViewFrame: CGRect {  }
-
-    var movesCounter: Int = 0 // How many moves
-    
-    var buttonPrintMoves: MatrixCellButton = {
-        let button: MatrixCellButton = MatrixCellButton()
-        button.addTarget(self, action: #selector(buttonTest(_:)), for: .touchUpInside)
-        button.backgroundColor = .black
-        return button
-    }()
-    
-    @objc func buttonTest(_ sender: MatrixCellButton) {
-        print(movesCounter)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .red
-        view.addSubview(buttonPrintMoves)
         view.addSubview(boardView)
     }
     
@@ -42,8 +27,5 @@ class GameViewController: UIViewController {
         let height: CGFloat = width
         boardView.frame = CGRect(x: x, y: y, width: width, height: height)
         boardView.center = view.center
-        
-        buttonPrintMoves.frame = CGRect(x: view.center.x, y: view.bounds.height - 50, width: 50, height: 50)
-
     }
 }
