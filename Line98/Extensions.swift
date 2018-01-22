@@ -30,6 +30,12 @@ extension Array {
     }
 }
 
+extension Int {
+    static func random(max: Int) -> Int {
+        return Int(arc4random_uniform(UInt32(max)))
+    }
+}
+
 // My favorite palette of colors
 public extension UIColor {
     

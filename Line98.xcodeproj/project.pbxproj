@@ -11,6 +11,7 @@
 		FA5137D42013E81E00C17871 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5137D32013E81E00C17871 /* GameViewController.swift */; };
 		FA5137D92013E81E00C17871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5137D82013E81E00C17871 /* Assets.xcassets */; };
 		FA5137DC2013E81E00C17871 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA5137DA2013E81E00C17871 /* LaunchScreen.storyboard */; };
+		FA614EEB201611E300BBE06A /* CellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA614EEA201611E300BBE06A /* CellButton.swift */; };
 		FACE9AC52015948900100679 /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC42015948900100679 /* GameModels.swift */; };
 		FACE9AC72015949F00100679 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC62015949F00100679 /* Extensions.swift */; };
 		FACE9AC92015E55000100679 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE9AC82015E55000100679 /* BoardView.swift */; };
@@ -23,6 +24,7 @@
 		FA5137D82013E81E00C17871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA5137DB2013E81E00C17871 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA5137DD2013E81E00C17871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA614EEA201611E300BBE06A /* CellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellButton.swift; sourceTree = "<group>"; };
 		FACE9AC42015948900100679 /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 		FACE9AC62015949F00100679 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FACE9AC82015E55000100679 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				FA5137D32013E81E00C17871 /* GameViewController.swift */,
 				FACE9AC42015948900100679 /* GameModels.swift */,
 				FACE9AC82015E55000100679 /* BoardView.swift */,
+				FA614EEA201611E300BBE06A /* CellButton.swift */,
 				FACE9AC62015949F00100679 /* Extensions.swift */,
 				FA5137D82013E81E00C17871 /* Assets.xcassets */,
 				FA5137DA2013E81E00C17871 /* LaunchScreen.storyboard */,
@@ -144,6 +147,7 @@
 				FA5137D42013E81E00C17871 /* GameViewController.swift in Sources */,
 				FACE9AC52015948900100679 /* GameModels.swift in Sources */,
 				FACE9AC92015E55000100679 /* BoardView.swift in Sources */,
+				FA614EEB201611E300BBE06A /* CellButton.swift in Sources */,
 				FA5137D22013E81E00C17871 /* AppDelegate.swift in Sources */,
 				FACE9AC72015949F00100679 /* Extensions.swift in Sources */,
 			);

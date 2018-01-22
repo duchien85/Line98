@@ -57,20 +57,3 @@ class BoardView: UIView {
         }
     }
 }
-
-class CellButton: UIButton {
-    
-    private(set) var position: Position!
-    
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    public required init(position: Position, frame: CGRect? = nil) {
-        super.init(frame: frame ?? .zero)
-        self.position = position
-        self.backgroundColor = .white
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 2
-    }
-}
