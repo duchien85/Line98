@@ -22,10 +22,9 @@ class GameViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let x: CGFloat = 10
-        let y: CGFloat = 50
         let width: CGFloat = (view.bounds.width<view.bounds.height) ? (view.bounds.width - 2*x) : view.bounds.height - 2*x
         let height: CGFloat = width
-        boardView.frame = CGRect(x: x, y: y, width: width, height: height)
+        boardView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         boardView.center = view.center
     }
 }
