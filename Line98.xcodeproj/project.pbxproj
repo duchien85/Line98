@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA17DABC2016892F009DAC71 /* BallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA17DABB2016892F009DAC71 /* BallView.swift */; };
 		FA5137D22013E81E00C17871 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5137D12013E81E00C17871 /* AppDelegate.swift */; };
 		FA5137D42013E81E00C17871 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5137D32013E81E00C17871 /* GameViewController.swift */; };
 		FA5137D92013E81E00C17871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5137D82013E81E00C17871 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA17DABB2016892F009DAC71 /* BallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallView.swift; sourceTree = "<group>"; };
 		FA5137CE2013E81E00C17871 /* Line98.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Line98.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA5137D12013E81E00C17871 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA5137D32013E81E00C17871 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +45,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA17DABE2016898C009DAC71 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FA5137D12013E81E00C17871 /* AppDelegate.swift */,
+				FACE9AC62015949F00100679 /* Extensions.swift */,
+				FA5137D82013E81E00C17871 /* Assets.xcassets */,
+				FA5137DA2013E81E00C17871 /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		FA5137C52013E81E00C17871 = {
 			isa = PBXGroup;
 			children = (
@@ -62,16 +75,14 @@
 		FA5137D02013E81E00C17871 /* Line98 */ = {
 			isa = PBXGroup;
 			children = (
-				FA5137D12013E81E00C17871 /* AppDelegate.swift */,
-				FA5137D32013E81E00C17871 /* GameViewController.swift */,
-				FACE9AC42015948900100679 /* GameModels.swift */,
 				FA614EEC20162FA700BBE06A /* Board.swift */,
+				FACE9AC42015948900100679 /* GameModels.swift */,
 				FACE9AC82015E55000100679 /* BoardView.swift */,
 				FA614EEA201611E300BBE06A /* CellButton.swift */,
-				FACE9AC62015949F00100679 /* Extensions.swift */,
-				FA5137D82013E81E00C17871 /* Assets.xcassets */,
-				FA5137DA2013E81E00C17871 /* LaunchScreen.storyboard */,
+				FA17DABB2016892F009DAC71 /* BallView.swift */,
+				FA5137D32013E81E00C17871 /* GameViewController.swift */,
 				FA5137DD2013E81E00C17871 /* Info.plist */,
+				FA17DABE2016898C009DAC71 /* Supporting Files */,
 			);
 			path = Line98;
 			sourceTree = "<group>";
@@ -154,6 +165,7 @@
 				FA614EEB201611E300BBE06A /* CellButton.swift in Sources */,
 				FA5137D22013E81E00C17871 /* AppDelegate.swift in Sources */,
 				FACE9AC72015949F00100679 /* Extensions.swift in Sources */,
+				FA17DABC2016892F009DAC71 /* BallView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

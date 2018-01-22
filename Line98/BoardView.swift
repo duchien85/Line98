@@ -12,52 +12,14 @@ class BoardView: UIView, BoardDelegate {
     
     var board: Board = Board(order: 9)
     
+    //
     private var buttons: [[CellButton]] = []
     private var ballViews: [BallView] = []
     
-    private var buttonSide: CGFloat {
-        return bounds.width / CGFloat(board.order)
-    }
-    
-    private var smallBallDiameter: CGFloat {
-        return  buttonSide/2
-    }
-    
-    private var bigBallDiameter: CGFloat {
-        return buttonSide * 0.85
-    }
-    
-    private func frame(from position: Position, side: CGFloat) -> CGRect {
-        let x: CGFloat = CGFloat(position.column) * side
-        let y: CGFloat = CGFloat(position.row) * side
-        return CGRect(x: x, y: y, width: side, height: side)
-    }
-    
-    private var initialPosition: Position? = nil
-    
-    @objc func tapped(_ cell: CellButton) {
-        if let position = initialPosition {
-            let finalPosition: Position = cell.position
-            guard board[finalPosition].ball == nil else {
-                if board[finalPosition].ball!.isBig {
-                    initialPosition = finalPosition
-                }
-                return
-            }
-            moveItem(from: position, to: finalPosition)
-            print("Moving ball to \(finalPosition)")
-        } else {
-            let startPosition: Position = cell.position
-            guard let ball = board[startPosition].ball, ball.isBig else { return }
-            initialPosition = startPosition
-            print("The start position is \(startPosition)")
-        }
-    }
-    
-    private func moveItem(from: Position, to: Position) {
-        board.moveBall(from: from, to: to)
-        initialPosition = nil
-    }
+    // Getting sizes of the views
+    private var buttonSide: CGFloat { return bounds.width / CGFloat(board.order) }
+    private var smallBallDiameter: CGFloat { return  buttonSide * 0.3 }
+    private var bigBallDiameter: CGFloat { return buttonSide * 0.85 }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -83,8 +45,42 @@ class BoardView: UIView, BoardDelegate {
         setFramesForBallViews()
     }
     
-    /// Sets frames for ballViews
-    func setFramesForBallViews() {
+    /// Return the frame when provided with the `position` inside of the board matrix
+    /// and the `side` of the square in which the item needs to be inscribed in.
+    private func frame(from position: Position, side: CGFloat) -> CGRect {
+        let x: CGFloat = CGFloat(position.column) * side
+        let y: CGFloat = CGFloat(position.row) * side
+        return CGRect(x: x, y: y, width: side, height: side)
+    }
+    
+    private var initialPosition: Position? = nil
+    
+    @objc private func tapped(_ cell: CellButton) {
+        if let position = initialPosition {
+            let finalPosition: Position = cell.position
+            guard board[finalPosition].ball == nil else {
+                if board[finalPosition].ball!.isBig {
+                    initialPosition = finalPosition
+                }
+                return
+            }
+            moveItem(from: position, to: finalPosition)
+            print("And moving it to \(finalPosition)")
+        } else {
+            let startPosition: Position = cell.position
+            guard let ball = board[startPosition].ball, ball.isBig else { return }
+            initialPosition = startPosition
+            print("Taking the ball from \(startPosition)")
+        }
+    }
+    
+    private func moveItem(from: Position, to: Position) {
+        board.moveBall(from: from, to: to)
+        initialPosition = nil
+    }
+    
+    /// Sets frames for `ball views` inside the `board view`
+    private func setFramesForBallViews() {
         ballViews.forEach { (ballView) in
             let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
             let position: Position = ballView.position
@@ -93,7 +89,7 @@ class BoardView: UIView, BoardDelegate {
         }
     }
     
-    func createButtons() {
+    private func createButtons() {
         for row in 0..<board.order {
             var newRow: [CellButton] = []
             for column in 0..<board.order {
@@ -109,12 +105,12 @@ class BoardView: UIView, BoardDelegate {
 
 // MARK: - BoardDelegate
 extension BoardView {
+    /// Creates `Ball Views` for each `ball` that was randomly created by the `board`
     func didInsert(_ balls: [Ball]) {
         balls.forEach { (ball) in
             let ballView = BallView(ball)
             ballViews.append(ballView)
             self.addSubview(ballView)
-            print("added balls")
         }
     }
 }

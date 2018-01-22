@@ -35,9 +35,11 @@ struct Board {
         insertBalls()
     }
     
+    /// Update the `position` of the `ball` with the new selected position
     mutating func moveBall(from: Position, to: Position) {
         guard let ball = self[from].ball else { return }
         ball.position = to // update position of this ball
+        // TODO: Check that that there aren't 5 balls
         self[from] = Cell.empty(from)
         self[to] = Cell.occupied(to, ball)
         insertBalls()
@@ -86,6 +88,7 @@ extension Board {
         set { self.matrix[position.row][position.column] = newValue }
     }
     
+    /// Array of available for move empty positions.
     var emptyPositions: [Position] {
         var positions: [Position] = []
         matrix.forEach { (rows) in
@@ -98,6 +101,7 @@ extension Board {
         return positions
     }
     
+    /// Array of obstacle positions that are occupied by a `ball`.
     var occupiedPositions: [Position] {
         var positions: [Position] = []
         matrix.forEach { (rows) in
