@@ -53,7 +53,7 @@ struct Board {
         }
         smallBalls.removeAll()
         
-        for _ in 0..<1 {
+        for _ in 0..<3 {
             let positions: [Position] = emptyPositions
             
             if positions.isEmpty {

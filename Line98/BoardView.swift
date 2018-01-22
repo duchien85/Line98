@@ -10,7 +10,7 @@ import UIKit
 
 class BoardView: UIView, BoardDelegate {
     
-    var board: Board = Board(order: 6)
+    var board: Board = Board(order: 9)
     
     private var buttons: [[CellButton]] = []
     private var ballViews: [BallView] = []
@@ -24,7 +24,7 @@ class BoardView: UIView, BoardDelegate {
     }
     
     private var bigBallDiameter: CGFloat {
-        return buttonSide - 15
+        return buttonSide * 0.85
     }
     
     private func frame(from position: Position, side: CGFloat) -> CGRect {
@@ -36,23 +36,27 @@ class BoardView: UIView, BoardDelegate {
     private var initialPosition: Position? = nil
     
     @objc func tapped(_ cell: CellButton) {
-        print(cell.position)
         if let position = initialPosition {
             let finalPosition: Position = cell.position
-            guard board[finalPosition].ball == nil else { return }
+            guard board[finalPosition].ball == nil else {
+                if board[finalPosition].ball!.isBig {
+                    initialPosition = finalPosition
+                }
+                return
+            }
             moveItem(from: position, to: finalPosition)
+            print("Moving ball to \(finalPosition)")
         } else {
             let startPosition: Position = cell.position
             guard let ball = board[startPosition].ball, ball.isBig else { return }
             initialPosition = startPosition
-            print("yay")
+            print("The start position is \(startPosition)")
         }
     }
     
     private func moveItem(from: Position, to: Position) {
         board.moveBall(from: from, to: to)
         initialPosition = nil
-        setBallViewsFrame()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,18 +72,19 @@ class BoardView: UIView, BoardDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.layer.borderWidth = 2
         // Set frames to buttons
         for row in buttons {
             for button in row {
                 button.frame = frame(from: button.position, side: buttonSide)
             }
         }
-        // Set frames to ballViews
-        setBallViewsFrame()
+        setFramesForBallViews()
     }
     
     /// Sets frames for ballViews
-    func setBallViewsFrame() {
+    func setFramesForBallViews() {
         ballViews.forEach { (ballView) in
             let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
             let position: Position = ballView.position

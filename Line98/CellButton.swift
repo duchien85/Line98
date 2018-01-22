@@ -20,8 +20,8 @@ class CellButton: UIButton {
         super.init(frame: frame ?? .zero)
         self.position = position
         self.backgroundColor = .white
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 2
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        self.layer.borderWidth = 1
     }
 }
 
@@ -41,13 +41,14 @@ class BallView: UIView {
         super.init(frame: frame ?? .zero)
         self.ball = ball
         self.isUserInteractionEnabled = false
+        self.backgroundColor = BallView.colors[ball.colorIndex]
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         self.layer.cornerRadius = bounds.width / 2
         self.clipsToBounds = true
-        self.backgroundColor = UIColor.blue
     }
     
-}
+    static var colors: [UIColor] = [.red, .black, .blue, .brown, .green, .cyan, .magenta]
+    }
