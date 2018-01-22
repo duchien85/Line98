@@ -1,5 +1,5 @@
 //
-//  MatrixViewController.swift
+//  GameViewController.swift
 //  Line98
 //
 //  Created by Glaphi on 20/01/2018.
@@ -8,21 +8,19 @@
 
 import UIKit
 
-import UIKit
-
-class MatrixViewController: UIViewController {
+class GameViewController: UIViewController {
     
     var matrix: Matrix = []
-    var movesCounter: Int = 0 // how many moves
+    var movesCounter: Int = 0 // How many moves
     
     var buttonPrintMoves: MatrixButton = {
         let button: MatrixButton = MatrixButton()
-        button.addTarget(self, action: #selector(checkSelected(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonTest(_:)), for: .touchUpInside)
         button.backgroundColor = .black
         return button
     }()
     
-    @objc func checkSelected(_ sender: MatrixButton) {
+    @objc func buttonTest(_ sender: MatrixButton) {
         print(movesCounter)
     }
     
@@ -30,7 +28,7 @@ class MatrixViewController: UIViewController {
         //let matrix: Matrix = sender.paramethers["matrix"] as! Matrix
         let pos: Position = sender.paramethers["position"] as! Position
         print(pos)
-        movesCounter += 1 // counts how many touches where made since the beggining
+        movesCounter += 1 // Counts how many touches where made since the beggining
     }
     
     override func viewDidLoad() {
@@ -65,10 +63,10 @@ class MatrixViewController: UIViewController {
         
         matrix = makeMatrix()
         
-        // Adding passable paramether
+        // Adding passable paramethers
         for i in 0...matrix[0].count-1 {
             for j in 0...matrix[0].count-1 {
-                let position: Position = (i, j)
+                let position: Position = Position(row: i, column: j)
                 matrix[i][j].paramethers.updateValue(position, forKey: "position")
                 matrix[i][j].paramethers.updateValue(matrix, forKey: "matrix")
             }

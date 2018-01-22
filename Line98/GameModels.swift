@@ -8,48 +8,49 @@
 
 import UIKit
 
-typealias Position = (row: Int, column: Int)
-typealias Matrix = [[MatrixButton]]
+
+struct Position {
+    let row: Int
+    let column: Int
+}
 
 enum Cell {
-    case empty
-    case inTransition // Small Ball just appeared
-    case occupied   // by Big Ball
-    
-    func getItem(frame: CGRect) -> MatrixButton {
+    case empty(Position)
+    case occupied(Position, Ball)   //  with a Ball
+
+    var position: Position {
         switch self {
-        case .empty:
-            let btn: MatrixButton = MatrixButton(frame: frame)
-            btn.isEnabled = false
-            btn.layer.cornerRadius = 5
-            return btn
-        case .inTransition:
-            let btn: MatrixButton = MatrixButton(frame: frame)
-            btn.isEnabled = false
-            btn.layer.cornerRadius = 80
-            return btn
-        case .occupied:
-            let btn: MatrixButton = MatrixButton(frame: frame)
-            btn.isEnabled = true
-            btn.layer.cornerRadius = 45
-            return btn
+        case .empty(let position):
+            return (position)
+        case .occupied((let position), _):
+            return (position)
+        }
+    }
+    
+    var ball: Ball? {
+        switch self {
+        case .empty(_):
+            return nil
+        case .occupied((_), let ball):
+            return ball
         }
     }
 }
 
 struct Ball {
     var position: Position
-    var color: UIColor
-    var isBig: Bool
+    var isBig: Bool = false // Making them always small when they appear.
     
-    private let colorArray: [UIColor] = [.softRed, .softGray, .softPurple, .softYellow, .softLigthBlue, .softAquamarine, .softLightGreen]
+    private var colorIndex: Int  // Color cannot change during the game
+    private static let colors: [Int] = Array(0..<7) // Array for picking a random color index
     
     init(position: Position) {
         self.position = position
-        color = colorArray.randomItem()!
-        isBig = false
+        colorIndex = Ball.colors.randomItem()!
     }
 }
+
+typealias Matrix = [[MatrixButton]]
 
 class MatrixButton: UIButton {
     var paramethers: Dictionary<String, Any>

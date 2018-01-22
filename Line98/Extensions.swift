@@ -30,6 +30,7 @@ extension Array {
     }
 }
 
+// My favorite palette of colors
 public extension UIColor {
     
     static var softLigthBlue: UIColor {
