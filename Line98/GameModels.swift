@@ -17,6 +17,7 @@ enum Direction {
     case row
     case column
     case diagonal
+    case antidiagonal
 }
 
 class Ball {

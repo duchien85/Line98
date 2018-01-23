@@ -17,6 +17,7 @@ struct Board {
     var delegate: BoardDelegate?
     let order: Int
     private var matrix: [[Cell]] = []
+    private var minToRemove: Int = 3
     
     init(order: Int) {
         self.order = order
@@ -129,15 +130,18 @@ extension Board {
         return positions
     }
     
+    /// Check that the row and the column are within matrix borders
     private func isInMatrix(_ p: Position) -> Bool {
         return (p.row<self.order) && (p.column<order) && (p.column>=0) && (p.row>=0)
     }
     
+    /// Next position using provided increments for row and column
     private func nextPosition(_ p: Position, rowIncrement: Int, columnIncrement: Int) -> Position {
         return Position(row: p.row + rowIncrement, column: p.column + columnIncrement)
     }
     
-    func checkColorsInDirection(_ direction: Direction, position: Position) ->  [Position]  {
+    /// Getting array of positions with balls of matching colors in one of 3 possible lines (horizontal, vertical or diagonal)
+    private func checkColorsInDirection(_ direction: Direction, position: Position) ->  [Position]  {
         var positions: [Position] = []
         var i: Int = 0
         var j: Int = 0
@@ -151,6 +155,9 @@ extension Board {
         case .diagonal:
             i = 1
             j = 1
+        case .antidiagonal:
+            i = 1
+            j = -1
         }
         // Check one direction
         var next = nextPosition(position, rowIncrement: 0, columnIncrement: 0)
@@ -159,7 +166,7 @@ extension Board {
             next = nextPosition(next, rowIncrement: i, columnIncrement: j)
         }
         // Check oposite direction
-        if positions.count < 5 && !positions.isEmpty {
+        if !positions.isEmpty {
             next = Position(row: positions.last!.row, column: positions.last!.column)
             positions.removeAll()
             while isInMatrix(next) && (self[next].colorIndex == self[position].colorIndex) {
@@ -167,34 +174,19 @@ extension Board {
                 next = nextPosition(next, rowIncrement: i * (-1), columnIncrement: j * (-1))
             }
         }
-        
+        if positions.count < minToRemove { positions.removeAll() }
         return positions
     }
     
+    /// Checks matching balls in all possible directions and returns array of their positions
     private func checkIfColorsMatch(_ position: Position) -> [Position] {
         var positions: [Position] = []
-        var checkedPositions: [Position] = []
         guard let ball = self[position].ball else { return []}
-        
-        positions = checkColorsInDirection(.row, position: ball.position)
-        print("in row", positions)
-        
-        if positions.count < 3 { positions.removeAll() }
-        checkedPositions = checkColorsInDirection(.column, position: ball.position)
-        if checkedPositions.count > 2 {
-            checkedPositions.forEach { (position) in
-                positions.append(position)
-            }
-        }
-        print("in column", checkedPositions)
 
-        checkedPositions = checkColorsInDirection(.diagonal, position: ball.position)
-        if checkedPositions.count > 2 {
-        checkedPositions.forEach { (position) in
-            positions.append(position)
-            }
-        }
-        print("in diagonal", checkedPositions)
+        positions = checkColorsInDirection(.row, position: ball.position)
+        positions.append(contentsOf: checkColorsInDirection(.column, position: ball.position))
+        positions.append(contentsOf: checkColorsInDirection(.diagonal, position: ball.position))
+        positions.append(contentsOf: checkColorsInDirection(.antidiagonal, position: ball.position))
         
         return positions
     }
