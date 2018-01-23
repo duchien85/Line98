@@ -48,8 +48,8 @@ struct Board {
         self[position] = Cell.occupied(position, ball)
         
         // Check that that there aren't same color balls together
-        let positions: [Position] = checkIfColorsMatch(position)
-        positions.forEach { (position) in
+        let matchingPositions: [Position] = matchingPositionsAround(position)
+        matchingPositions.forEach { (position) in
             deletedBallPositions.append(position)
             self[position] = Cell.empty(position)
         }
@@ -142,7 +142,7 @@ extension Board {
     }
     
     /// Getting array of positions with balls of matching colors in one of 3 possible lines (horizontal, vertical or diagonal)
-    private func checkColorsInDirection(_ direction: Direction, position: Position) ->  [Position]  {
+    private func matchingPositions(in direction: Direction, position: Position) ->  [Position]  {
         var positions: [Position] = []
         var i: Int = 0
         var j: Int = 0
@@ -180,14 +180,14 @@ extension Board {
     }
     
     /// Checks matching balls in all possible directions and returns array of their positions
-    private func checkIfColorsMatch(_ position: Position) -> [Position] {
+    private func matchingPositionsAround(_ position: Position) -> [Position] {
         var positions: [Position] = []
         guard let ball = self[position].ball else { return []}
 
-        positions = checkColorsInDirection(.row, position: ball.position)
-        positions.append(contentsOf: checkColorsInDirection(.column, position: ball.position))
-        positions.append(contentsOf: checkColorsInDirection(.diagonal, position: ball.position))
-        positions.append(contentsOf: checkColorsInDirection(.antidiagonal, position: ball.position))
+        positions = matchingPositions(in: .row, position: ball.position)
+        positions.append(contentsOf: matchingPositions(in: .column, position: ball.position))
+        positions.append(contentsOf: matchingPositions(in: .diagonal, position: ball.position))
+        positions.append(contentsOf: matchingPositions(in: .antidiagonal, position: ball.position))
         
         return positions
     }
