@@ -10,6 +10,7 @@ import Foundation
 
 protocol BoardDelegate {
     func didInsert(_ balls: [Ball])
+    func didDelete(in positions: [Position])
 }
 
 struct Board {
@@ -36,17 +37,31 @@ struct Board {
     }
     
     /// Update the `position` of the `ball` with the new selected position
-    mutating func moveBall(from: Position, to: Position) {
-        guard let ball = self[from].ball else { return }
-        ball.position = to // update position of this ball
-        // TODO: Check that that there aren't 5 balls
-        self[from] = Cell.empty(from)
-        self[to] = Cell.occupied(to, ball)
+    mutating func moveBall(from initialPosition: Position, to position: Position) {
+        guard let ball = self[initialPosition].ball else { return }
+        deletedBallPositions.removeAll()
+        
+        // Update position of this ball
+        ball.position =  position
+        self[initialPosition] = Cell.empty(initialPosition)
+        self[position] = Cell.occupied(position, ball)
+        
+        // Check that that there aren't same color balls together
+        let positions: [Position] = checkIfColorsMatch(position)
+        positions.forEach { (position) in
+            deletedBallPositions.append(position)
+            self[position] = Cell.empty(position)
+            print(position)
+        }
+        delegate?.didDelete(in: deletedBallPositions)
         insertBalls()
     }
     
     /// Array of the pending small balls
     private var smallBalls: [Ball] = []
+    /// Array of deleted balls
+    private var deletedBallPositions: [Position] = []
+
     
     mutating private func insertBalls() {
         smallBalls.forEach { (ball) in
@@ -111,6 +126,76 @@ extension Board {
                 }
             })
         }
+        return positions
+    }
+    
+    private func isInMatrix(_ p: Position) -> Bool {
+        return (p.row<self.order) && (p.column<order) && (p.column>=0) && (p.row>=0)
+    }
+    
+    private func nextPosition(_ p: Position, rowIncrement: Int, columnIncrement: Int) -> Position {
+        return Position(row: p.row + rowIncrement, column: p.column + columnIncrement)
+    }
+    
+    func checkColorsInDirection(_ direction: Direction, position: Position) ->  [Position]  {
+        var positions: [Position] = []
+        var i: Int = 0
+        var j: Int = 0
+        switch direction {
+        case .row:
+            i = 0
+            j = 1
+        case .column:
+            i = 1
+            j = 0
+        case .diagonal:
+            i = 1
+            j = 1
+        }
+        // Check one direction
+        var next = nextPosition(position, rowIncrement: 0, columnIncrement: 0)
+        while isInMatrix(next) && (self[next].colorIndex == self[position].colorIndex) {
+            positions.append(next)
+            next = nextPosition(next, rowIncrement: i, columnIncrement: j)
+        }
+        // Check oposite direction
+        if positions.count < 5 && !positions.isEmpty {
+            next = Position(row: positions.last!.row, column: positions.last!.column)
+            positions.removeAll()
+            while isInMatrix(next) && (self[next].colorIndex == self[position].colorIndex) {
+                positions.append(next)
+                next = nextPosition(next, rowIncrement: i * (-1), columnIncrement: j * (-1))
+            }
+        }
+        
+        return positions
+    }
+    
+    private func checkIfColorsMatch(_ position: Position) -> [Position] {
+        var positions: [Position] = []
+        var checkedPositions: [Position] = []
+        guard let ball = self[position].ball else { return []}
+        
+        positions = checkColorsInDirection(.row, position: ball.position)
+        print("in row", positions)
+        
+        if positions.count < 3 { positions.removeAll() }
+        checkedPositions = checkColorsInDirection(.column, position: ball.position)
+        if checkedPositions.count > 2 {
+            checkedPositions.forEach { (position) in
+                positions.append(position)
+            }
+        }
+        print("in column", checkedPositions)
+
+        checkedPositions = checkColorsInDirection(.diagonal, position: ball.position)
+        if checkedPositions.count > 2 {
+        checkedPositions.forEach { (position) in
+            positions.append(position)
+            }
+        }
+        print("in diagonal", checkedPositions)
+        
         return positions
     }
 }

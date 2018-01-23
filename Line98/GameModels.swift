@@ -13,9 +13,10 @@ struct Position {
     let column: Int
 }
 
-enum Cell {
-    case empty(Position)
-    case occupied(Position, Ball)       //  with a Ball
+enum Direction {
+    case row
+    case column
+    case diagonal
 }
 
 class Ball {
@@ -33,6 +34,11 @@ class Ball {
     }
 }
 
+enum Cell {
+    case empty(Position)
+    case occupied(Position, Ball)       //  with a Ball
+}
+
 extension Cell {
     var position: Position {
         switch self {
@@ -44,6 +50,13 @@ extension Cell {
         switch self {
         case .empty(_): return nil
         case .occupied((_), let ball): return ball
+        }
+    }
+    
+    var colorIndex: Int? {
+        switch self {
+        case .empty(_): return nil
+        case .occupied((_), let ball): return ball.colorIndex
         }
     }
 }

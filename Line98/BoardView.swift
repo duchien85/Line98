@@ -12,7 +12,6 @@ class BoardView: UIView, BoardDelegate {
     
     var board: Board = Board(order: 9)
     
-    //
     private var buttons: [[CellButton]] = []
     private var ballViews: [BallView] = []
     
@@ -53,6 +52,7 @@ class BoardView: UIView, BoardDelegate {
         return CGRect(x: x, y: y, width: side, height: side)
     }
     
+    /// Initial position of the selected ball
     private var initialPosition: Position? = nil
     
     @objc private func tapped(_ cell: CellButton) {
@@ -74,12 +74,17 @@ class BoardView: UIView, BoardDelegate {
         }
     }
     
+    /// Update `ball view` position
     private func moveItem(from: Position, to: Position) {
+        // Calling board to update matrix data
+        // This is the end of the player's move
+        // So the board will aslo create 3 new random balls
+        // and hence 3 new ball views
         board.moveBall(from: from, to: to)
         initialPosition = nil
     }
     
-    /// Sets frames for `ball views` inside the `board view`
+    /// Set frames for `ball views` inside the `board view`
     private func setFramesForBallViews() {
         ballViews.forEach { (ballView) in
             let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
@@ -89,6 +94,7 @@ class BoardView: UIView, BoardDelegate {
         }
     }
     
+    /// Create a 2d array of buttons
     private func createButtons() {
         for row in 0..<board.order {
             var newRow: [CellButton] = []
@@ -111,6 +117,16 @@ extension BoardView {
             let ballView = BallView(ball)
             ballViews.append(ballView)
             self.addSubview(ballView)
+        }
+    }
+    
+    func didDelete(in positions: [Position]) {
+        positions.forEach { (pos) in
+            ballViews.forEach({ (view) in
+                if (view.position.row == pos.row) && (view.position.column == pos.column) {
+                    view.removeFromSuperview()
+                }
+            })
         }
     }
 }

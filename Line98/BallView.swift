@@ -11,6 +11,7 @@ import UIKit
 class BallView: UIView {
     var ball: Ball! // Must have a ball
     
+    /// Returns the coordinates of the `ball` in the matrix
     var position: Position {
         return ball.position
     }
@@ -32,5 +33,6 @@ class BallView: UIView {
         self.clipsToBounds = true
     }
     
+    /// The array of 7 available color for the `ball views`
     static var colors: [UIColor] = [.red, .black, .blue, .brown, .green, .cyan, .magenta]
 }
