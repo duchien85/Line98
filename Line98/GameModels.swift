@@ -13,11 +13,13 @@ struct Position {
     let column: Int
 }
 
-enum Direction {
-    case row
-    case column
-    case diagonal
-    case antidiagonal
+struct Direction {
+    let i: Int
+    let j: Int
+    static let row = Direction(i: 0, j: 1)
+    static let column = Direction(i: 1, j: 0)
+    static let diagonal = Direction(i: 1, j: 1)
+    static let antidiagonal = Direction(i: 1, j: -1)
 }
 
 class Ball {
@@ -60,4 +62,12 @@ extension Cell {
         case .occupied((_), let ball): return ball.colorIndex
         }
     }
+}
+
+extension Position {
+    /// Next position using provided increments for row and column
+    func next(rowIncrement: Int, columnIncrement: Int) -> Position {
+        return Position(row: self.row + rowIncrement, column: self.column + columnIncrement)
+    }
+    
 }

@@ -63,7 +63,7 @@ struct Board {
     private var smallBalls: [Ball] = []
     /// Array of deleted balls
     private var deletedBallPositions: [Position] = []
-
+    
     
     mutating private func insertBalls() {
         smallBalls.forEach { (ball) in
@@ -136,45 +136,29 @@ extension Board {
         return (p.row<self.order) && (p.column<order) && (p.column>=0) && (p.row>=0)
     }
     
-    /// Next position using provided increments for row and column
-    private func nextPosition(_ p: Position, rowIncrement: Int, columnIncrement: Int) -> Position {
-        return Position(row: p.row + rowIncrement, column: p.column + columnIncrement)
-    }
-    
-    /// Getting array of positions with balls of matching colors in one of 3 possible lines (horizontal, vertical or diagonal)
+    /// Getting array of positions with balls of matching colors in one of `minToRemove` possible lines (horizontal, vertical or diagonal)
     private func matchingPositions(in direction: Direction, position: Position) ->  [Position]  {
         var positions: [Position] = []
-        var i: Int = 0
-        var j: Int = 0
-        switch direction {
-        case .row:
-            i = 0
-            j = 1
-        case .column:
-            i = 1
-            j = 0
-        case .diagonal:
-            i = 1
-            j = 1
-        case .antidiagonal:
-            i = 1
-            j = -1
-        }
-        // Check one direction
-        var next = nextPosition(position, rowIncrement: 0, columnIncrement: 0)
-        while isInMatrix(next) && (self[next].colorIndex == self[position].colorIndex) {
-            positions.append(next)
-            next = nextPosition(next, rowIncrement: i, columnIncrement: j)
-        }
-        // Check oposite direction
-        if !positions.isEmpty {
-            next = Position(row: positions.last!.row, column: positions.last!.column)
-            positions.removeAll()
-            while isInMatrix(next) && (self[next].colorIndex == self[position].colorIndex) {
-                positions.append(next)
-                next = nextPosition(next, rowIncrement: i * (-1), columnIncrement: j * (-1))
+        var position: Position = position
+        let i: Int = direction.i
+        let j: Int = direction.j
+        let color = self[position].colorIndex
+        // Change this nexting function thingy
+        func colorAt(_ p: Position) -> Int? { return self[p].colorIndex }
+        
+        func checkThroughOneDirection(forward: Bool) {
+            while isInMatrix(position) && (colorAt(position) == color) {         // Check line in one direction
+                positions.append(position)
+                position = forward ? position.next(rowIncrement: i, columnIncrement: j) : position.next(rowIncrement: i * (-1), columnIncrement: j * (-1))
+            }
+            if forward {    // Check line in the oposite direction
+                position = positions.last!
+                positions.removeAll()
+                checkThroughOneDirection(forward: false)
             }
         }
+        
+        checkThroughOneDirection(forward: true)
         if positions.count < minToRemove { positions.removeAll() }
         return positions
     }
@@ -183,7 +167,7 @@ extension Board {
     private func matchingPositionsAround(_ position: Position) -> [Position] {
         var positions: [Position] = []
         guard let ball = self[position].ball else { return []}
-
+        
         positions = matchingPositions(in: .row, position: ball.position)
         positions.append(contentsOf: matchingPositions(in: .column, position: ball.position))
         positions.append(contentsOf: matchingPositions(in: .diagonal, position: ball.position))
