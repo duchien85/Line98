@@ -52,10 +52,11 @@ struct Board {
         positions.forEach { (position) in
             deletedBallPositions.append(position)
             self[position] = Cell.empty(position)
-            print(position)
         }
         delegate?.didDelete(in: deletedBallPositions)
-        insertBalls()
+        if deletedBallPositions.isEmpty {
+            insertBalls()
+        }
     }
     
     /// Array of the pending small balls

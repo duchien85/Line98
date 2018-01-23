@@ -65,12 +65,10 @@ class BoardView: UIView, BoardDelegate {
                 return
             }
             moveItem(from: position, to: finalPosition)
-            print("And moving it to \(finalPosition)")
         } else {
             let startPosition: Position = cell.position
             guard let ball = board[startPosition].ball, ball.isBig else { return }
             initialPosition = startPosition
-            print("Taking the ball from \(startPosition)")
         }
     }
     
