@@ -13,11 +13,18 @@ protocol BoardDelegate {
     func didDelete(in positions: [Position])
 }
 
-struct Board {
+class Board {
     var delegate: BoardDelegate?
+    let pathfinder = AStarPathfinder()
+    var path: [Position]?
     let order: Int
+    
     private var matrix: [[Cell]] = []
     private var minToRemove: Int = 3
+    /// Array of the pending small balls
+    private var smallBalls: [Ball] = []
+    /// Array of deleted balls
+    private var deletedBallPositions: [Position] = []
     
     init(order: Int) {
         self.order = order
@@ -29,20 +36,22 @@ struct Board {
             }
             matrix.append(newRow)
         }
+        pathfinder.dataSource = self
     }
     
-    mutating func startNewGame() {
+    func startNewGame() {
         clean()
         insertBalls()
         insertBalls()
     }
     
     /// Update the `position` of the `ball` with the new selected position
-    mutating func moveBall(from initialPosition: Position, to position: Position) {
+    func moveBall(from initialPosition: Position, to position: Position) {
         guard let ball = self[initialPosition].ball else { return }
         deletedBallPositions.removeAll()
         
         // Update position of this ball
+        path = pathfinder.shortestPath(from: initialPosition, to: position)
         ball.position =  position
         self[initialPosition] = Cell.empty(initialPosition)
         self[position] = Cell.occupied(position, ball)
@@ -59,13 +68,7 @@ struct Board {
         }
     }
     
-    /// Array of the pending small balls
-    private var smallBalls: [Ball] = []
-    /// Array of deleted balls
-    private var deletedBallPositions: [Position] = []
-    
-    
-    mutating private func insertBalls() {
+    private func insertBalls() {
         smallBalls.forEach { (ball) in
             ball.isBig = true
         }
@@ -89,12 +92,12 @@ struct Board {
         delegate?.didInsert(smallBalls)
     }
     
-    mutating func gameOver() {
+    func gameOver() {
         print("Game Over")
         clean()
     }
     
-    mutating func clean() {
+    func clean() {
         // if !occupiedPositions.isEmpty {}
     }
 }
@@ -132,7 +135,7 @@ extension Board {
     }
     
     /// Check that the row and the column are within matrix borders
-    private func isInMatrix(_ p: Position) -> Bool {
+    fileprivate func isInMatrix(_ p: Position) -> Bool {
         return (p.row<self.order) && (p.column<order) && (p.column>=0) && (p.row>=0)
     }
     
@@ -176,3 +179,22 @@ extension Board {
         return positions
     }
 }
+
+// MARK: - PathFinderDataSource
+
+extension Board: PathFinderDataSource {
+    
+    func walkableAdjacentPositions(for position: Position) -> [Position] {
+        var neighbors: [Position] = [position.top, position.bottom, position.left, position.right]
+        neighbors = neighbors.filter({ (pos) -> Bool in
+            ((isInMatrix(pos)) && (self[pos].ball == nil))
+        })
+        return neighbors
+    }
+    
+    func costToMove(from position: Position, to neighborPosition: Position) -> Int {
+        return 1
+    }
+}
+
+
