@@ -52,6 +52,11 @@ class Board {
         
         // Update position of this ball
         path = pathfinder.shortestPath(from: initialPosition, to: position)
+        if let path = path {
+            print("Path Found: ")
+            for position in path { print(position) }
+            print("Destination was successfully reached")
+        }
         ball.position =  position
         self[initialPosition] = Cell.empty(initialPosition)
         self[position] = Cell.occupied(position, ball)

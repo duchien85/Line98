@@ -107,8 +107,8 @@
 				FA0D1A0B202C72D700EA4482 /* GameLogic */,
 				FA0D1A0C202C72EA00EA4482 /* Views */,
 				FA5137D32013E81E00C17871 /* GameViewController.swift */,
-				FA0D1A0D202C75EF00EA4482 /* ShortestPathStep.swift */,
 				FAC9E845202C6B6200089C5D /* AStarPathfinder.swift */,
+				FA0D1A0D202C75EF00EA4482 /* ShortestPathStep.swift */,
 				FA5137DD2013E81E00C17871 /* Info.plist */,
 				FA17DABE2016898C009DAC71 /* Supporting Files */,
 			);

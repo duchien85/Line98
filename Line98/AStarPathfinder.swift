@@ -26,6 +26,16 @@ class AStarPathfinder {
         return abs(destination.column - origin.column) + abs(destination.row - origin.row)
     }
     
+    private func positionsConvertedFromSteps(to step: ShortestPathStep) -> [Position] {
+        var path: [Position] = []
+        var currentStep: ShortestPathStep = step
+        while let parent = currentStep.parent { // if parent is nil, then it is our starting step, so don't include it
+            path.insert(currentStep.position, at: 0)
+            currentStep = parent
+        }
+        return path
+    }
+    
     func shortestPath(from origin: Position, to destination: Position) -> [Position]? {
         // placeholder: move immediately to the destination coordinate
         if self.dataSource == nil { return nil }
@@ -39,13 +49,7 @@ class AStarPathfinder {
             closedSteps.insert(currentStep)
             
             if currentStep.position == destination {
-                print("Path Found")
-                var step: ShortestPathStep? = currentStep
-                while step != nil {
-                    print(step!.description) // printing in reverse
-                    step = step!.parent
-                }
-                return []
+                return positionsConvertedFromSteps(to: currentStep)
             }
             
             let neighbors: [Position] = dataSource.walkableAdjacentPositions(for: currentStep.position)
@@ -69,7 +73,6 @@ class AStarPathfinder {
                 }
             }
         }
-        
         return nil
     }
 }
