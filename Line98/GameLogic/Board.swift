@@ -11,6 +11,7 @@ import Foundation
 protocol BoardDelegate {
     func didInsert(_ balls: [Ball])
     func didDelete(in positions: [Position])
+    func foundWalkablePath(_ initialPosition: Position, positions: [Position])
 }
 
 class Board {
@@ -27,7 +28,7 @@ class Board {
     private var deletedBallPositions: [Position] = []
     /// Initial position of the ball before the move
     private var initialPosition: Position? = nil
-
+    
     
     init(order: Int) {
         self.order = order
@@ -69,28 +70,28 @@ class Board {
     func moveBall(from initialPosition: Position, to position: Position) {
         guard let ball = self[initialPosition].ball else { return }
         deletedBallPositions.removeAll()
-        self.initialPosition = nil
-
-        // Update position of this ball
+        
+        // Update position of this ball if there is a path to the destination
         path = pathfinder.shortestPath(from: initialPosition, to: position)
         if let path = path {
             print("Path Found: ")
-            for position in path { print(position) }
+            delegate?.foundWalkablePath(initialPosition, positions: path)
+            self.initialPosition = nil
             print("Destination was successfully reached")
-        }
-        ball.position =  position
-        self[initialPosition] = Cell.empty(initialPosition)
-        self[position] = Cell.occupied(position, ball)
-        
-        // Check that that there aren't same color balls together
-        let matchingPositions: [Position] = matchingPositionsAround(position)
-        matchingPositions.forEach { (position) in
-            deletedBallPositions.append(position)
-            self[position] = Cell.empty(position)
-        }
-        delegate?.didDelete(in: deletedBallPositions)
-        if deletedBallPositions.isEmpty {
-            insertBalls()
+            ball.position =  position
+            self[initialPosition] = Cell.empty(initialPosition)
+            self[position] = Cell.occupied(position, ball)
+            
+            // Check that that there aren't same color balls inline
+            let matchingPositions: [Position] = matchingPositionsAround(position)
+            matchingPositions.forEach { (position) in
+                deletedBallPositions.append(position)
+                self[position] = Cell.empty(position)
+            }
+            delegate?.didDelete(in: deletedBallPositions)
+            if deletedBallPositions.isEmpty {
+                insertBalls()
+            }
         }
     }
     
@@ -134,12 +135,11 @@ extension Board {
         set { self.matrix[position.row][position.column] = newValue }
     }
     
-    /// Array of available for move empty positions.
-    var emptyPositions: [Position] {
+    private func filterPositions(condition: ((Cell) -> Bool) ) -> [Position] {
         var positions: [Position] = []
         matrix.forEach { (rows) in
             rows.forEach({ (cell) in
-                if cell.ball == nil {
+                if condition(cell) {
                     positions.append(cell.position)
                 }
             })
@@ -147,17 +147,18 @@ extension Board {
         return positions
     }
     
+    /// Array of available for move empty positions.
+    var emptyPositions: [Position] {
+        return filterPositions { (cell) -> Bool in
+            cell.ball == nil
+        }
+    }
+    
     /// Array of obstacle positions that are occupied by a `ball`.
     var occupiedPositions: [Position] {
-        var positions: [Position] = []
-        matrix.forEach { (rows) in
-            rows.forEach({ (cell) in
-                if cell.ball != nil {
-                    positions.append(cell.position)
-                }
-            })
+        return filterPositions { (cell) -> Bool in
+            cell.ball != nil
         }
-        return positions
     }
     
     /// Check that the row and the column are within matrix borders

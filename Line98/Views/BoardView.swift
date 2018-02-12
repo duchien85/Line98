@@ -14,6 +14,7 @@ class BoardView: UIView, BoardDelegate {
     
     private var buttons: [[CellButton]] = []
     private var ballViews: [BallView] = []
+    private var animatedBall: BallView? = nil
     
     // Getting sizes of the views
     private var buttonSide: CGFloat { return bounds.width / CGFloat(board.order) }
@@ -59,10 +60,12 @@ class BoardView: UIView, BoardDelegate {
     /// Set frames for `ball views` inside the `board view`
     private func setFramesForBallViews() {
         ballViews.forEach { (ballView) in
+            if ballView != animatedBall {
             let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
             let position: Position = ballView.position
             ballView.frame = frame(from: position, side: side)
             ballView.center = buttons[position.row][position.column].center
+            }
         }
     }
     
@@ -80,10 +83,43 @@ class BoardView: UIView, BoardDelegate {
         }
     }
 }
-
+extension BoardView {
+    
+    subscript(position: Position) -> CellButton {
+        get { return buttons[position.row][position.column] }
+        set { self.buttons[position.row][position.column] = newValue }
+    }
+}
 // MARK: - BoardDelegate
 extension BoardView {
     /// Creates `Ball Views` for each `ball` that was randomly created by the `board`
+    
+    func animate(_ ball: BallView, path: [CGPoint], index: Int) {
+        if !path.isEmpty {
+            UIView.animate(withDuration: 0.5, animations: {
+                ball.center = path[index]
+            }, completion: { ( true) in
+                let i: Int = index + 1
+                    if i < path.count {
+                self.animate(ball, path: path, index: index+1)
+                } 
+            })
+        }
+    }
+    
+    func foundWalkablePath(_ initialPosition: Position, positions: [Position]) {
+        var path: [CGPoint] = [self[initialPosition].center]
+        positions.forEach { (pos) in
+            path.append(self[pos].center)
+            print(pos)
+        }
+        let ball: BallView? = ballViews.filter({ (ball) -> Bool in
+            return ball.position == initialPosition
+        }).first
+        animatedBall = ball
+        animate(ball!, path: path, index: 0)
+    }
+    
     func didInsert(_ balls: [Ball]) {
         balls.forEach { (ball) in
             let ballView = BallView(ball)
