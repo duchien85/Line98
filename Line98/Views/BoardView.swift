@@ -52,34 +52,8 @@ class BoardView: UIView, BoardDelegate {
         return CGRect(x: x, y: y, width: side, height: side)
     }
     
-    /// Initial position of the selected ball
-    private var initialPosition: Position? = nil
-    
     @objc private func tapped(_ cell: CellButton) {
-        if let position = initialPosition {
-            let finalPosition: Position = cell.position
-            guard board[finalPosition].ball == nil else {
-                if board[finalPosition].ball!.isBig {
-                    initialPosition = finalPosition
-                }
-                return
-            }
-            moveItem(from: position, to: finalPosition)
-        } else {
-            let startPosition: Position = cell.position
-            guard let ball = board[startPosition].ball, ball.isBig else { return }
-            initialPosition = startPosition
-        }
-    }
-    
-    /// Update `ball view` position
-    private func moveItem(from: Position, to: Position) {
-        // Calling board to update matrix data
-        // This is the end of the player's move
-        // So the board will aslo create 3 new random balls
-        // and hence 3 new ball views
-        board.moveBall(from: from, to: to)
-        initialPosition = nil
+        board.tapped(cell.position)
     }
     
     /// Set frames for `ball views` inside the `board view`
@@ -121,7 +95,7 @@ extension BoardView {
     func didDelete(in positions: [Position]) {
         positions.forEach { (pos) in
             ballViews.forEach({ (view) in
-                if (view.position.row == pos.row) && (view.position.column == pos.column) {
+                if view.position == pos {
                     view.removeFromSuperview()
                 }
             })

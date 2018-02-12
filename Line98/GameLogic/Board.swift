@@ -45,10 +45,46 @@ class Board {
         insertBalls()
     }
     
+    //    if let position = initialPosition {
+    //        let finalPosition: Position = cell.position
+    //        guard board[finalPosition].ball == nil else {
+    //            if board[finalPosition].ball!.isBig {
+    //                initialPosition = finalPosition
+    //            }
+    //            return
+    //        }
+    //        moveItem(from: position, to: finalPosition)
+    //    } else {
+    //    let startPosition: Position = cell.position
+    //    guard let ball = board[startPosition].ball, ball.isBig else { return }
+    //    initialPosition = startPosition
+    //    }
+    private var initialPosition: Position? = nil
+    
+    func tapped(_ position: Position) {
+        if let start = initialPosition {
+            let position: Position = position
+            guard self[position].ball == nil else {
+                if self[position].ball!.isBig {
+                    initialPosition = position
+                }
+                return
+            }
+            moveBall(from: start, to: position)
+        } else {
+            let start: Position = position
+            guard let ball = self[start].ball, ball.isBig else { return }
+            initialPosition = start
+        }
+    }
+    
+    
     /// Update the `position` of the `ball` with the new selected position
     func moveBall(from initialPosition: Position, to position: Position) {
         guard let ball = self[initialPosition].ball else { return }
         deletedBallPositions.removeAll()
+        self.initialPosition = nil
+
         
         // Update position of this ball
         path = pathfinder.shortestPath(from: initialPosition, to: position)
