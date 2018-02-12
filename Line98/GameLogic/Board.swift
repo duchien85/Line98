@@ -81,17 +81,19 @@ class Board {
             ball.position =  position
             self[initialPosition] = Cell.empty(initialPosition)
             self[position] = Cell.occupied(position, ball)
-            
-            // Check that that there aren't same color balls inline
-            let matchingPositions: [Position] = matchingPositionsAround(position)
-            matchingPositions.forEach { (position) in
-                deletedBallPositions.append(position)
-                self[position] = Cell.empty(position)
-            }
-            delegate?.didDelete(in: deletedBallPositions)
-            if deletedBallPositions.isEmpty {
-                insertBalls()
-            }
+        }
+    }
+    
+    func checkComboAfterMove(to position: Position) {
+        // Check that that there aren't same color balls inline
+        let matchingPositions: [Position] = matchingPositionsAround(position)
+        matchingPositions.forEach { (position) in
+            deletedBallPositions.append(position)
+            self[position] = Cell.empty(position)
+        }
+        delegate?.didDelete(in: deletedBallPositions)
+        if deletedBallPositions.isEmpty {
+            insertBalls()
         }
     }
     

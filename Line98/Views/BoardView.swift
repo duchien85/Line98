@@ -61,10 +61,10 @@ class BoardView: UIView, BoardDelegate {
     private func setFramesForBallViews() {
         ballViews.forEach { (ballView) in
             if ballView != animatedBall {
-            let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
-            let position: Position = ballView.position
-            ballView.frame = frame(from: position, side: side)
-            ballView.center = buttons[position.row][position.column].center
+                let side: CGFloat = ballView.ball.isBig ? bigBallDiameter : smallBallDiameter
+                let position: Position = ballView.position
+                ballView.frame = frame(from: position, side: side)
+                ballView.center = buttons[position.row][position.column].center
             }
         }
     }
@@ -94,15 +94,17 @@ extension BoardView {
 extension BoardView {
     /// Creates `Ball Views` for each `ball` that was randomly created by the `board`
     
-    func animate(_ ball: BallView, path: [CGPoint], index: Int) {
+    func animate(_ ball: BallView, path: [CGPoint], destination: Position, index: Int) {
         if !path.isEmpty {
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 ball.center = path[index]
             }, completion: { ( true) in
                 let i: Int = index + 1
-                    if i < path.count {
-                self.animate(ball, path: path, index: index+1)
-                } 
+                if i < path.count {
+                    self.animate(ball, path: path,destination: destination, index: index+1)
+                } else {
+                    self.board.checkComboAfterMove(to: destination)
+                }
             })
         }
     }
@@ -117,7 +119,7 @@ extension BoardView {
             return ball.position == initialPosition
         }).first
         animatedBall = ball
-        animate(ball!, path: path, index: 0)
+        animate(ball!, path: path, destination: positions.last!, index: 0)
     }
     
     func didInsert(_ balls: [Ball]) {
