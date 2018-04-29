@@ -8,6 +8,7 @@
 
 import UIKit
 
+// TODO: Would be a really great idea to get rid of this
 class CellButton: UIButton {
     
     private(set) var position: Position!

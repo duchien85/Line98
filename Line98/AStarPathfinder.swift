@@ -68,6 +68,12 @@ class AStarPathfinder {
     }
 }
 
+// NOTE FOR MYSELF
+// These functions were previously implemented in Board thought PathFinderDataSource protocol
+// And the AStarPathFinder constantly asked the board to calculate and provide this information
+// On each step. But this bad decision: board as the main class should be independant.
+// Except maybe the cost should be sent as a parameter too.
+// But in this game the cost is always the same so it doesnt matter
 extension AStarPathfinder {
     
     func walkableAdjacentPositions(in emptyPositions: [Position], around position: Position) -> [Position] {

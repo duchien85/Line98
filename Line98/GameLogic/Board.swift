@@ -8,12 +8,14 @@
 
 import Foundation
 
+// Delegate protocol that is specifically for this and only this board
 protocol BoardDelegate {
     func didInsert(_ balls: [Ball])
     func didDelete(in positions: [Position])
     func foundWalkablePath(_ initialPosition: Position, positions: [Position])
 }
 
+/// Main class of this Game 
 class Board {
     var delegate: BoardDelegate?
     let pathfinder = AStarPathfinder()
@@ -73,10 +75,8 @@ class Board {
         // Update position of this ball if there is a path to the destination
         path = pathfinder.shortestPath(in: emptyPositions, from: initialPosition, to: destination)
         if let path = path {
-            print("Path Found: ")
             delegate?.foundWalkablePath(initialPosition, positions: path)
             self.initialPosition = nil
-            print("Destination was successfully reached")
             ball.position =  destination
             self[initialPosition] = Cell.empty(initialPosition)
             self[destination] = Cell.occupied(destination, ball)

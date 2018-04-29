@@ -113,7 +113,6 @@ extension BoardView {
         var path: [CGPoint] = [self[initialPosition].center]
         positions.forEach { (pos) in
             path.append(self[pos].center)
-            print(pos)
         }
         let ball: BallView? = ballViews.filter({ (ball) -> Bool in
             return ball.position == initialPosition
