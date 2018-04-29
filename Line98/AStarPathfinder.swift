@@ -8,22 +8,16 @@
 
 import Foundation
 
-// AnyObject for class
-protocol PathFinderDataSource: AnyObject {
-    func walkableAdjacentPositions(for position: Position) -> [Position]
-    func costToMove(from position: Position, to neighborPosition: Position) -> Int
-}
-
 /// A pathfinder based on the A* algorithm to find the shortest path between two locations
 class AStarPathfinder {
+    
+    func hScoreFrom(_ origin: Position, to destination: Position) -> Int {
+        return abs(destination.column - origin.column) + abs(destination.row - origin.row)
+    }
     
     private func insert(_ step: ShortestPathStep, in openSteps: inout [ShortestPathStep]) {
         openSteps.append(step)
         openSteps.sort { $0.fScore <= $1.fScore }
-    }
-    
-    func hScoreFrom(_ origin: Position, to destination: Position) -> Int {
-        return abs(destination.column - origin.column) + abs(destination.row - origin.row)
     }
     
     private func positionsConvertedFromSteps(to step: ShortestPathStep) -> [Position] {
