@@ -16,7 +16,6 @@ protocol PathFinderDataSource: AnyObject {
 
 /// A pathfinder based on the A* algorithm to find the shortest path between two locations
 class AStarPathfinder {
-    weak var dataSource: PathFinderDataSource?
     
     private func insert(_ step: ShortestPathStep, in openSteps: inout [ShortestPathStep]) {
         openSteps.append(step)
@@ -37,10 +36,7 @@ class AStarPathfinder {
         return path
     }
     
-    func shortestPath(from origin: Position, to destination: Position) -> [Position]? {
-        // placeholder: move immediately to the destination coordinate
-        if self.dataSource == nil { return nil }
-        let dataSource: PathFinderDataSource = self.dataSource!
+    func shortestPath(in emptyPositions: [Position], from origin: Position, to destination: Position) -> [Position]? {
         
         var closedSteps = Set<ShortestPathStep>()
         var openSteps: [ShortestPathStep] = [ShortestPathStep(origin)]
@@ -53,11 +49,11 @@ class AStarPathfinder {
                 return positionsConvertedFromSteps(to: currentStep)
             }
             
-            let neighbors: [Position] = dataSource.walkableAdjacentPositions(for: currentStep.position)
+            let neighbors: [Position] = walkableAdjacentPositions(in: emptyPositions, around: currentStep.position)
             for pos in neighbors {
                 let step: ShortestPathStep = ShortestPathStep(pos)
                 if closedSteps.contains(step) { continue }
-                let moveCost = dataSource.costToMove(from: currentStep.position, to: step.position)
+                let moveCost = costToMove(from: currentStep.position, to: step.position)
                 
                 if let existingIndex: Int = openSteps.index(of: step) {
                     let step = openSteps[existingIndex]
@@ -75,5 +71,20 @@ class AStarPathfinder {
             }
         }
         return nil
+    }
+}
+
+extension AStarPathfinder {
+    
+    func walkableAdjacentPositions(in emptyPositions: [Position], around position: Position) -> [Position] {
+        var neighbors: [Position] = [position.top, position.bottom, position.left, position.right]
+        neighbors = neighbors.filter({ (pos) -> Bool in
+            emptyPositions.contains(pos)
+        })
+        return neighbors
+    }
+    
+    func costToMove(from position: Position, to neighborPosition: Position) -> Int {
+        return 1
     }
 }

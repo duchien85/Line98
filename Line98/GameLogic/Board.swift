@@ -40,7 +40,6 @@ class Board {
             }
             matrix.append(newRow)
         }
-        pathfinder.dataSource = self
     }
     
     func startNewGame() {
@@ -67,20 +66,20 @@ class Board {
     }
     
     /// Update the `position` of the `ball` with the new selected position
-    func moveBall(from initialPosition: Position, to position: Position) {
+    func moveBall(from initialPosition: Position, to destination: Position) {
         guard let ball = self[initialPosition].ball else { return }
         deletedBallPositions.removeAll()
         
         // Update position of this ball if there is a path to the destination
-        path = pathfinder.shortestPath(from: initialPosition, to: position)
+        path = pathfinder.shortestPath(in: emptyPositions, from: initialPosition, to: destination)
         if let path = path {
             print("Path Found: ")
             delegate?.foundWalkablePath(initialPosition, positions: path)
             self.initialPosition = nil
             print("Destination was successfully reached")
-            ball.position =  position
+            ball.position =  destination
             self[initialPosition] = Cell.empty(initialPosition)
-            self[position] = Cell.occupied(position, ball)
+            self[destination] = Cell.occupied(destination, ball)
         }
     }
     
@@ -206,23 +205,6 @@ extension Board {
         positions.append(contentsOf: matchingPositions(in: .antidiagonal, position: ball.position))
         
         return positions
-    }
-}
-
-// MARK: - PathFinderDataSource
-
-extension Board: PathFinderDataSource {
-    
-    func walkableAdjacentPositions(for position: Position) -> [Position] {
-        var neighbors: [Position] = [position.top, position.bottom, position.left, position.right]
-        neighbors = neighbors.filter({ (pos) -> Bool in
-            ((isInMatrix(pos)) && (self[pos].ball == nil))
-        })
-        return neighbors
-    }
-    
-    func costToMove(from position: Position, to neighborPosition: Position) -> Int {
-        return 1
     }
 }
 
