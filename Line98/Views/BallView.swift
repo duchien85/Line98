@@ -22,6 +22,7 @@ class BallView: UIView {
     
     required init(_ ball: Ball, frame: CGRect? = nil) {
         super.init(frame: frame ?? .zero)
+
         self.ball = ball
         self.isUserInteractionEnabled = false
         self.backgroundColor = BallView.colors[ball.colorIndex]
@@ -29,6 +30,7 @@ class BallView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+
         self.layer.cornerRadius = bounds.width / 2
         self.clipsToBounds = true
     }

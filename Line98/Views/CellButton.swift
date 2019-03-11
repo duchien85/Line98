@@ -19,9 +19,18 @@ class CellButton: UIButton {
     
     public required init(position: Position, frame: CGRect? = nil) {
         super.init(frame: frame ?? .zero)
+        
         self.position = position
         self.backgroundColor = .white
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.layer.borderWidth = 1
     }
+
+    override var isHighlighted: Bool {
+        willSet {
+            backgroundColor = newValue ? .gray : .white
+            super.isHighlighted = newValue
+        }
+    }
+    
 }

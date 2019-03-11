@@ -49,7 +49,7 @@ class AStarPathfinder {
                 if closedSteps.contains(step) { continue }
                 let moveCost = costToMove(from: currentStep.position, to: step.position)
                 
-                if let existingIndex: Int = openSteps.index(of: step) {
+                if let existingIndex: Int = openSteps.firstIndex(of: step) {
                     let step = openSteps[existingIndex]
                     if currentStep.gScore + moveCost < step.gScore {
                         step.setParent(currentStep, withMoveCost: moveCost)

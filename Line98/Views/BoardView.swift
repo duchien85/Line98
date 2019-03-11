@@ -20,6 +20,7 @@ class BoardView: UIView, BoardDelegate {
     private var buttonSide: CGFloat { return bounds.width / CGFloat(board.order) }
     private var smallBallDiameter: CGFloat { return  buttonSide * 0.3 }
     private var bigBallDiameter: CGFloat { return buttonSide * 0.85 }
+    private var animationDuration: TimeInterval { return 0.2 }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -27,6 +28,7 @@ class BoardView: UIView, BoardDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         board.delegate = self
         createButtons()
         board.startNewGame()
@@ -34,6 +36,7 @@ class BoardView: UIView, BoardDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.layer.borderWidth = 2
         // Set frames to buttons
@@ -83,6 +86,7 @@ class BoardView: UIView, BoardDelegate {
         }
     }
 }
+
 extension BoardView {
     
     subscript(position: Position) -> CellButton {
@@ -90,6 +94,7 @@ extension BoardView {
         set { self.buttons[position.row][position.column] = newValue }
     }
 }
+
 // MARK: - BoardDelegate
 extension BoardView {
     /// Creates `Ball Views` for each `ball` that was randomly created by the `board`

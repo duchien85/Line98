@@ -19,12 +19,13 @@ class ShortestPathStep: Hashable, Equatable {
         return gScore + hScore
     }
     
-    var hashValue: Int {
-        return position.column.hashValue + position.row.hashValue
-    }
-    
     init(_ position: Position) {
         self.position = position
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(position.column.hashValue)
+        hasher.combine(position.row.hashValue)
     }
     
     func setParent(_ parent: ShortestPathStep, withMoveCost moveCost: Int) {
